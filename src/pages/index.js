@@ -95,6 +95,13 @@ export default () => {
 				onChange={ ( ev ) => setBlogValue( ev.target.value ) }
 			/>
 
+			{ blogURL && (
+				<div className="wp-admin-link">
+					<br />
+					Admin -> <a href={ `http://${ blogURL }/wp-admin/edit.php `} target="_blank">{ blogURL }</a>
+				</div>
+			) }
+
 			<br />
 
 			{
