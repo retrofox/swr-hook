@@ -52,7 +52,11 @@ const PostsList = ( { posts } ) => {
 			{
 				map( posts, ( { guid, title, id, modified } ) => (
 					<div key={ id } className="post-container">
-						<a href={ guid.rendered }>{ title.rendered }</a>
+						<a
+							href={ guid.rendered }
+							dangerouslySetInnerHTML={ { __html: title.rendered } }
+						/>
+
 						<span className="date"> ( {
 							new Date( modified ).toLocaleDateString('en-US' )
 						} )</span>
@@ -67,8 +71,8 @@ const PostsList = ( { posts } ) => {
 
 export default () => {
 	const [ perPage, setPerPage ] = useState( 5 );
-	const [ blobValue, setBlogValue ] = useState( 'retrofoxsimplecustom01.wordpress.com' );
-	const [ blogId ] = useDebounce( blobValue, 1000 );
+	const [ blogURL, setBlogValue ] = useState( 'retrofoxsimplecustom01.wordpress.com' );
+	const [ blogId ] = useDebounce( blogURL, 1000 );
 
 	const { data, error } = useSWR(
 		`${API_HOST}${API_VERSION}sites/${blogId}/posts?per_page=${ perPage }`,
@@ -87,9 +91,11 @@ export default () => {
 
 			<input
 				type="text"
-				value={ blobValue }
+				value={ blogURL }
 				onChange={ ( ev ) => setBlogValue( ev.target.value ) }
 			/>
+
+			<br />
 
 			{
 				( data && data.data && data.data.status !== 200 ) && (
